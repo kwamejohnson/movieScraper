@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html ng-app = "myMovieAp">
+  <head>
+    <meta charset="utf-8">
+    <script src="./../bower_components/angular/angular.js"></script>
+    <script src="./../bower_components/angular-route/angular-route.js"></script>
+    <script type="text/javascript">
+
+    // ===========================CONFIG=======================
+
+    var myApp = angular.module('myMovieAp', ['ngRoute']);
+
+    myApp.config(function($routeProvider){
+      $routeProvider
+        .when('/', {
+          templateUrl: 'client/scraping.html'})
+        .otherwise({
+          redirectTo: '/'
+        })
+    });
+
+    // ===========================FACTORY=======================
+
+    myApp.factory('movieFactory', function($http){
+      var movies = [];
+      var factory = {};
+      console.log("INSIDE the movieFactory");
+
+
+      factory.index = function(callback){
+        $http.get('/').success(function(movies){
+          console.log("FROM THE FACTORY (index method): ", movies);
+          callback(movies);
+        })
+
+      }
+      return factory
+    })
+
+    // ===========================CONTROLLER=======================
+    myApp.controller('moviesController', ["$scope", "movieFactory", function($scope, movieFactory){
+
+      var self = this;
+
+            // $scope.movies = [];
+            $scope.fun = "Fun Fun Fun!!!!";
+
+            this.index = function(movies){
+                    movieFactory.index(function(movies){
+                      console.log("FROM THE moviesController: ", movies);
+
+                      $scope.movies = movies;
+                    })
+            }
+    }]);
+
+    </script>
+
+    <title></title>
+  </head>
+  <body>
+
+<div class="" ng-controller = "moviesController">
+  <h1>Movies</h1>
+<input type="submit" name="name" value="Show Movies" ng-click=>
+
+{{ movies }}
+{{ fun }}
+  <!-- <a href="#/movies">Showmovies</a> -->
+
+</div>
+
+
+
+  </body>
+</html>
