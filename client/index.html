@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html ng-app = "myMovieAp">
+  <head>
+    <meta charset="utf-8">
+    <!-- <script src="angular/angular.js"></script>
+    <script src="angular-route/angular-route.js"></script> -->
+
+    <script src='angular.js'></script>
+    <script src='angular-route.js'></script>
+    <link rel="stylesheet" href="index.css" media="screen" title="no title">
+
+
+    <script type="text/javascript">
+
+    // ===========================CONFIG=======================
+
+    var myApp = angular.module('myMovieAp', ['ngRoute']);
+
+    myApp.config(function($routeProvider){
+      $routeProvider
+        .when('/movies', {
+          templateUrl: 'movies.html'})
+        .otherwise({
+          redirectTo: '/'
+        })
+    });
+
+    // ===========================FACTORY=======================
+
+    myApp.factory('movieFactory', function($http){
+      var movies = [];
+      var factory = {};
+      console.log("INSIDE the movieFactory");
+
+      factory.showMovies = function(callback){
+        $http.get('/movies').success(function(movies){
+          console.log("FROM THE FACTORY (showMovies method): ", movies);
+          callback(movies);
+        })
+
+      }
+      factory.index = function(callback){
+        $http.get('/').success(function(movies){
+          console.log("FROM THE FACTORY (index method): ", movies);
+          callback(movies);
+        })
+
+      }
+      factory.test = function(callback){
+        $http.get('/test').success(function(testMessage){
+          console.log("FROM THE FACTORY (test method): ", testMessage);
+          callback(testMessage);
+        })
+
+      }
+      return factory
+    })
+
+    // ===========================CONTROLLER=======================
+    myApp.controller('moviesController', ["$scope", "movieFactory", function($scope, movieFactory){
+
+      $scope.movies = [];
+
+      $scope.showMovies = function(movies){
+        console.log("inside the showMovies function");
+
+        movieFactory.showMovies(function(movies){
+          $scope.movies = movies
+          $scope.movieNumber = $scope.movies.length
+
+        })
+        // // var request = require('request');
+        // // var cheerio = require('cheerio');
+        //
+        // var url = "http://www.fandango.com/bellevuelincolnsquarecinemas_aatvl/theaterpage?date=10%2f3%2f2016";
+        //
+        // 	request(url, (function() { return function(err, resp, body) {
+        // 			var movies = [];
+        // 			var ratings = []
+        // 			var durations = []
+        // 			var Sts = []
+        //
+        // 			var st = []
+        // 			$ = cheerio.load(body);
+        //
+        // 			$('.showtimes-movie-detail .showtimes-movie-title').each(function(movie) {
+        // 				var movieName = $(this).text();
+        //
+        // 				movies.push({ name: movieName,
+        // 										});
+        // 			});
+        // 			var counter = 0
+        // 											$('.showtimes-movie-detail .showtimes-movie-rating-runtime').each(function(movie) {
+        // 												var movieDeets = $(this).text();
+        // 												// console.log("length: ", movieDeets.length);
+        // 												var rating = movieDeets.slice(-115, -108).trim()
+        // 												var duration = movieDeets.slice(112, -29).trim()
+        // 												console.log("====================");
+        // 												console.log("rating: ", rating);
+        // 												console.log("duration: ", duration);
+        //
+        // 												ratings.push(rating)
+        // 												durations.push(duration)
+        //
+        // 											});
+        //
+        // 											console.log("RATINGS: \n", ratings);
+        // 											console.log("DURATIONS: \n", durations);
+        //
+        //
+        // 												$('.showtimes-times-area .showtimes-times').each(function(movie) {
+        //
+        // 													var showTimes = $(this).text().split("\n");
+        // 													var showTimesC = []
+        //
+        // 													for (var i = 0; i < showTimes.length; i++) {
+        // 														var C = showTimes[i].trim();
+        // 														if (C !== ""){
+        // 															showTimesC.push(C);
+        // 														}
+        // 													}
+        //
+        // 													console.log("~~~~~~~~~~~~~~~~~");
+        // 													console.log("showtimes: ", counter, " | ", showTimesC);
+        // 													Sts.push(showTimesC)
+        // 													counter ++;
+        //
+        // 											})
+        //
+        // 					for (var j = 0; j < movies.length; j++) {
+        // 						movies[j].rating = ratings[j]
+        // 						movies[j].duration = durations[j]
+        // 						movies[j].showtimes = Sts[j]
+        // 					}
+        // 					console.log("______________________________");
+        // 					console.log("MOVIES \n", "number of movies: ", movies.length, "\n", movies);
+        //
+        // 					$scope.movies = movies;
+        //
+        // 			};
+        // 	})());
+        //
+        //
+
+      }
+
+            // $scope.movies = [];
+            $scope.fun = "Fun Fun Fun...whooooohooooo!!";
+
+            this.index = function(movies){
+                    movieFactory.index(function(movies){
+                      console.log("FROM THE moviesController: ", movies);
+
+                      $scope.movies = movies;
+                    })
+            }
+            this.test = function(testMessage){
+              movieFactory.test(function(){
+                console.log("TEST TEST function", testMessage);
+                $scope.fun = "Fun Fun Fun!!!!";
+              })
+            }
+    }]);
+
+    </script>
+
+    <title></title>
+  </head>
+  <body>
+
+<div class="" ng-controller = "moviesController">
+  <h1>Movies</h1>
+
+<a href="#/movies">Movies</a>
+<br>
+
+<div ng-view = ''></div>
+
+
+
+
+  <!-- <a href="#/movies">Showmovies</a> -->
+
+</div>
+
+
+
+  </body>
+</html>

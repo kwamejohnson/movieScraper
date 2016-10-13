@@ -34,6 +34,13 @@
         })
 
       }
+      factory.test = function(callback){
+        $http.get('/test').success(function(testMessage){
+          console.log("FROM THE FACTORY (test method): ", testMessage);
+          callback(testMessage);
+        })
+
+      }
       return factory
     })
 
@@ -43,7 +50,7 @@
       var self = this;
 
             // $scope.movies = [];
-            $scope.fun = "Fun Fun Fun!!!!";
+            $scope.fun = "Fun Fun Fun";
 
             this.index = function(movies){
                     movieFactory.index(function(movies){
@@ -51,6 +58,12 @@
 
                       $scope.movies = movies;
                     })
+            }
+            this.test = function(testMessage){
+              movieFactory.test(function(){
+                console.log("TEST TEST function", testMessage);
+                $scope.fun = "Fun Fun Fun!!!!";
+              })
             }
     }]);
 
@@ -62,10 +75,15 @@
 
 <div class="" ng-controller = "moviesController">
   <h1>Movies</h1>
-<input type="submit" name="name" value="Show Movies" ng-click=>
+<input type="submit" name="name" value="Show Movies" ng-click=index()>
+<br>
+<input type="submit" name="name" value="Test" ng-click="test()">
+<br>
 
-{{ movies }}
-{{ fun }}
+Movies: {{ movies }}
+<br>
+<br>
+Fun: {{ fun }}
   <!-- <a href="#/movies">Showmovies</a> -->
 
 </div>

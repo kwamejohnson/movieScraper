@@ -1,3 +1,26 @@
 <div ng-controller = "moviesController">
-  Movies: {{ movies }}
+  <br>
+
+<h3>Lincoln Square Cinemas, Bellevue</h3>
+  <button type="submit" name="button" ng-click='showMovies()'>Show Movies</button>
+
+<div ng-show="movieNumber">
+  <h4>There are <b> <u>{{ movieNumber }}</u> </b> movies playing today</h4>
+</div>
+
+<div ng-show="movieNumber">
+<input name="searchMovie" type="text" ng-model="filter_name" placeholder="Enter movie name">
+</div>
+
+
+  <div ng-repeat = "movie in movies | filter: filter_name">
+
+    <br>
+
+    Movie name: {{ movie.name }} <br>
+    Duration: {{ movie.duration }} <br>
+    Rating: {{ movie.rating }} <br>
+    Showtimes: {{ movie.showtimes}} <br>
+    ________________________________
+  </div>
 </div>
